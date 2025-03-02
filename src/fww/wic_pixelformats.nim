@@ -1,0 +1,186 @@
+type
+  WicPixelFormat* = enum
+    wicPixelFormatDontCare
+    wicPixelFormat1bppIndexed
+    wicPixelFormat2bppIndexed
+    wicPixelFormat4bppIndexed
+    wicPixelFormat8bppIndexed
+    wicPixelFormatBlackWhite
+    wicPixelFormat2bppGray
+    wicPixelFormat4bppGray
+    wicPixelFormat8bppGray
+    wicPixelFormat8bppAlpha
+    wicPixelFormat16bppBGR555
+    wicPixelFormat16bppBGR565
+    wicPixelFormat16bppBGRA5551
+    wicPixelFormat16bppGray
+    wicPixelFormat24bppBGR
+    wicPixelFormat24bppRGB
+    wicPixelFormat32bppBGR
+    wicPixelFormat32bppBGRA
+    wicPixelFormat32bppPBGRA
+    wicPixelFormat32bppGrayFloat
+    wicPixelFormat32bppRGB
+    wicPixelFormat32bppRGBA
+    wicPixelFormat32bppPRGBA
+    wicPixelFormat48bppRGB
+    wicPixelFormat48bppBGR
+    wicPixelFormat64bppRGB
+    wicPixelFormat64bppRGBA
+    wicPixelFormat64bppBGRA
+    wicPixelFormat64bppPRGBA
+    wicPixelFormat64bppPBGRA
+    wicPixelFormat16bppGrayFixedPoint
+    wicPixelFormat32bppBGR101010
+    wicPixelFormat48bppRGBFixedPoint
+    wicPixelFormat48bppBGRFixedPoint
+    wicPixelFormat96bppRGBFixedPoint
+    wicPixelFormat96bppRGBFloat
+    wicPixelFormat128bppRGBAFloat
+    wicPixelFormat128bppPRGBAFloat
+    wicPixelFormat128bppRGBFloat
+    wicPixelFormat32bppCMYK
+    wicPixelFormat64bppRGBAFixedPoint
+    wicPixelFormat64bppBGRAFixedPoint
+    wicPixelFormat64bppRGBFixedPoint
+    wicPixelFormat128bppRGBAFixedPoint
+    wicPixelFormat128bppRGBFixedPoint
+    wicPixelFormat64bppRGBAHalf
+    wicPixelFormat64bppPRGBAHalf
+    wicPixelFormat64bppRGBHalf
+    wicPixelFormat48bppRGBHalf
+    wicPixelFormat32bppRGBE
+    wicPixelFormat16bppGrayHalf
+    wicPixelFormat32bppGrayFixedPoint
+    wicPixelFormat32bppRGBA1010102
+    wicPixelFormat32bppRGBA1010102XR
+    wicPixelFormat32bppR10G10B10A2
+    wicPixelFormat32bppR10G10B10A2HDR10
+    wicPixelFormat64bppCMYK
+    wicPixelFormat24bpp3Channels
+    wicPixelFormat32bpp4Channels
+    wicPixelFormat40bpp5Channels
+    wicPixelFormat48bpp6Channels
+    wicPixelFormat56bpp7Channels
+    wicPixelFormat64bpp8Channels
+    wicPixelFormat48bpp3Channels
+    wicPixelFormat64bpp4Channels
+    wicPixelFormat80bpp5Channels
+    wicPixelFormat96bpp6Channels
+    wicPixelFormat112bpp7Channels
+    wicPixelFormat128bpp8Channels
+    wicPixelFormat40bppCMYKAlpha
+    wicPixelFormat80bppCMYKAlpha
+    wicPixelFormat32bpp3ChannelsAlpha
+    wicPixelFormat40bpp4ChannelsAlpha
+    wicPixelFormat48bpp5ChannelsAlpha
+    wicPixelFormat56bpp6ChannelsAlpha
+    wicPixelFormat64bpp7ChannelsAlpha
+    wicPixelFormat72bpp8ChannelsAlpha
+    wicPixelFormat64bpp3ChannelsAlpha
+    wicPixelFormat80bpp4ChannelsAlpha
+    wicPixelFormat96bpp5ChannelsAlpha
+    wicPixelFormat112bpp6ChannelsAlpha
+    wicPixelFormat128bpp7ChannelsAlpha
+    wicPixelFormat144bpp8ChannelsAlpha
+    wicPixelFormat8bppY
+    wicPixelFormat8bppCb
+    wicPixelFormat8bppCr
+    wicPixelFormat16bppCbCr
+    wicPixelFormat16bppYQuantizedDctCoefficients
+    wicPixelFormat16bppCbQuantizedDctCoefficients
+    wicPixelFormat16bppCrQuantizedDctCoefficients
+
+const
+  WicPixelFormatGuids*: array[WicPixelFormat, WinGuid] = [
+    wicPixelFormatDontCare: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x00'u8]),
+    wicPixelFormat1bppIndexed: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x01'u8]),
+    wicPixelFormat2bppIndexed: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x02'u8]),
+    wicPixelFormat4bppIndexed: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x03'u8]),
+    wicPixelFormat8bppIndexed: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x04'u8]),
+    wicPixelFormatBlackWhite: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x05'u8]),
+    wicPixelFormat2bppGray: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x06'u8]),
+    wicPixelFormat4bppGray: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x07'u8]),
+    wicPixelFormat8bppGray: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x08'u8]),
+    wicPixelFormat8bppAlpha: WinGuid(Data1: 0xe6cd0116'u32, Data2: 0xeeba'u16, Data3: 0x4161'u16, Data4: [0xaa'u8, 0x85'u8, 0x27'u8, 0xdd'u8, 0x9f'u8, 0xb3'u8, 0xa8'u8, 0x95'u8]),
+    wicPixelFormat16bppBGR555: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x09'u8]),
+    wicPixelFormat16bppBGR565: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x0a'u8]),
+    wicPixelFormat16bppBGRA5551: WinGuid(Data1: 0x05ec7c2b'u32, Data2: 0xf1e6'u16, Data3: 0x4961'u16, Data4: [0xad'u8, 0x46'u8, 0xe1'u8, 0xcc'u8, 0x81'u8, 0x0a'u8, 0x87'u8, 0xd2'u8]),
+    wicPixelFormat16bppGray: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x0b'u8]),
+    wicPixelFormat24bppBGR: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x0c'u8]),
+    wicPixelFormat24bppRGB: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x0d'u8]),
+    wicPixelFormat32bppBGR: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x0e'u8]),
+    wicPixelFormat32bppBGRA: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x0f'u8]),
+    wicPixelFormat32bppPBGRA: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x10'u8]),
+    wicPixelFormat32bppGrayFloat: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x11'u8]),
+    wicPixelFormat32bppRGB: WinGuid(Data1: 0xd98c6b95'u32, Data2: 0x3efe'u16, Data3: 0x47d6'u16, Data4: [0xbb'u8, 0x25'u8, 0xeb'u8, 0x17'u8, 0x48'u8, 0xab'u8, 0x0c'u8, 0xf1'u8]),
+    wicPixelFormat32bppRGBA: WinGuid(Data1: 0xf5c7ad2d'u32, Data2: 0x6a8d'u16, Data3: 0x43dd'u16, Data4: [0xa7'u8, 0xa8'u8, 0xa2'u8, 0x99'u8, 0x35'u8, 0x26'u8, 0x1a'u8, 0xe9'u8]),
+    wicPixelFormat32bppPRGBA: WinGuid(Data1: 0x3cc4a650'u32, Data2: 0xa527'u16, Data3: 0x4d37'u16, Data4: [0xa9'u8, 0x16'u8, 0x31'u8, 0x42'u8, 0xc7'u8, 0xeb'u8, 0xed'u8, 0xba'u8]),
+    wicPixelFormat48bppRGB: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x15'u8]),
+    wicPixelFormat48bppBGR: WinGuid(Data1: 0xe605a384'u32, Data2: 0xb468'u16, Data3: 0x46ce'u16, Data4: [0xbb'u8, 0x2e'u8, 0x36'u8, 0xf1'u8, 0x80'u8, 0xe6'u8, 0x43'u8, 0x13'u8]),
+    wicPixelFormat64bppRGB: WinGuid(Data1: 0xa1182111'u32, Data2: 0x186d'u16, Data3: 0x4d42'u16, Data4: [0xbc'u8, 0x6a'u8, 0x9c'u8, 0x83'u8, 0x03'u8, 0xa8'u8, 0xdf'u8, 0xf9'u8]),
+    wicPixelFormat64bppRGBA: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x16'u8]),
+    wicPixelFormat64bppBGRA: WinGuid(Data1: 0x1562ff7c'u32, Data2: 0xd352'u16, Data3: 0x46f9'u16, Data4: [0x97'u8, 0x9e'u8, 0x42'u8, 0x97'u8, 0x6b'u8, 0x79'u8, 0x22'u8, 0x46'u8]),
+    wicPixelFormat64bppPRGBA: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x17'u8]),
+    wicPixelFormat64bppPBGRA: WinGuid(Data1: 0x8c518e8e'u32, Data2: 0xa4ec'u16, Data3: 0x468b'u16, Data4: [0xae'u8, 0x70'u8, 0xc9'u8, 0xa3'u8, 0x5a'u8, 0x9c'u8, 0x55'u8, 0x30'u8]),
+    wicPixelFormat16bppGrayFixedPoint: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x13'u8]),
+    wicPixelFormat32bppBGR101010: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x14'u8]),
+    wicPixelFormat48bppRGBFixedPoint: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x12'u8]),
+    wicPixelFormat48bppBGRFixedPoint: WinGuid(Data1: 0x49ca140e'u32, Data2: 0xcab6'u16, Data3: 0x493b'u16, Data4: [0x9d'u8, 0xdf'u8, 0x60'u8, 0x18'u8, 0x7c'u8, 0x37'u8, 0x53'u8, 0x2a'u8]),
+    wicPixelFormat96bppRGBFixedPoint: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x18'u8]),
+    wicPixelFormat96bppRGBFloat: WinGuid(Data1: 0xe3fed78f'u32, Data2: 0xe8db'u16, Data3: 0x4acf'u16, Data4: [0x84'u8, 0xc1'u8, 0xe9'u8, 0x7f'u8, 0x61'u8, 0x36'u8, 0xb3'u8, 0x27'u8]),
+    wicPixelFormat128bppRGBAFloat: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x19'u8]),
+    wicPixelFormat128bppPRGBAFloat: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x1a'u8]),
+    wicPixelFormat128bppRGBFloat: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x1b'u8]),
+    wicPixelFormat32bppCMYK: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x1c'u8]),
+    wicPixelFormat64bppRGBAFixedPoint: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x1d'u8]),
+    wicPixelFormat64bppBGRAFixedPoint: WinGuid(Data1: 0x356de33c'u32, Data2: 0x54d2'u16, Data3: 0x4a23'u16, Data4: [0xbb'u8, 0x04'u8, 0x9b'u8, 0x7b'u8, 0xf9'u8, 0xb1'u8, 0xd4'u8, 0x2d'u8]),
+    wicPixelFormat64bppRGBFixedPoint: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x40'u8]),
+    wicPixelFormat128bppRGBAFixedPoint: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x1e'u8]),
+    wicPixelFormat128bppRGBFixedPoint: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x41'u8]),
+    wicPixelFormat64bppRGBAHalf: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x3a'u8]),
+    wicPixelFormat64bppPRGBAHalf: WinGuid(Data1: 0x58ad26c2'u32, Data2: 0xc623'u16, Data3: 0x4d9d'u16, Data4: [0xb3'u8, 0x20'u8, 0x38'u8, 0x7e'u8, 0x49'u8, 0xf8'u8, 0xc4'u8, 0x42'u8]),
+    wicPixelFormat64bppRGBHalf: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x42'u8]),
+    wicPixelFormat48bppRGBHalf: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x3b'u8]),
+    wicPixelFormat32bppRGBE: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x3d'u8]),
+    wicPixelFormat16bppGrayHalf: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x3e'u8]),
+    wicPixelFormat32bppGrayFixedPoint: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x3f'u8]),
+    wicPixelFormat32bppRGBA1010102: WinGuid(Data1: 0x25238d72'u32, Data2: 0xfcf9'u16, Data3: 0x4522'u16, Data4: [0xb5'u8, 0x14'u8, 0x55'u8, 0x78'u8, 0xe5'u8, 0xad'u8, 0x55'u8, 0xe0'u8]),
+    wicPixelFormat32bppRGBA1010102XR: WinGuid(Data1: 0x00de6b9a'u32, Data2: 0xc101'u16, Data3: 0x434b'u16, Data4: [0xb5'u8, 0x02'u8, 0xd0'u8, 0x16'u8, 0x5e'u8, 0xe1'u8, 0x12'u8, 0x2c'u8]),
+    wicPixelFormat32bppR10G10B10A2: WinGuid(Data1: 0x604e1bb5'u32, Data2: 0x8a3c'u16, Data3: 0x4b65'u16, Data4: [0xb1'u8, 0x1c'u8, 0xbc'u8, 0x0b'u8, 0x8d'u8, 0xd7'u8, 0x5b'u8, 0x7f'u8]),
+    wicPixelFormat32bppR10G10B10A2HDR10: WinGuid(Data1: 0x9c215c5d'u32, Data2: 0x1acc'u16, Data3: 0x4f0e'u16, Data4: [0xa4'u8, 0xbc'u8, 0x70'u8, 0xfb'u8, 0x3a'u8, 0xe8'u8, 0xfd'u8, 0x28'u8]),
+    wicPixelFormat64bppCMYK: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x1f'u8]),
+    wicPixelFormat24bpp3Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x20'u8]),
+    wicPixelFormat32bpp4Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x21'u8]),
+    wicPixelFormat40bpp5Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x22'u8]),
+    wicPixelFormat48bpp6Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x23'u8]),
+    wicPixelFormat56bpp7Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x24'u8]),
+    wicPixelFormat64bpp8Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x25'u8]),
+    wicPixelFormat48bpp3Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x26'u8]),
+    wicPixelFormat64bpp4Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x27'u8]),
+    wicPixelFormat80bpp5Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x28'u8]),
+    wicPixelFormat96bpp6Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x29'u8]),
+    wicPixelFormat112bpp7Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x2a'u8]),
+    wicPixelFormat128bpp8Channels: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x2b'u8]),
+    wicPixelFormat40bppCMYKAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x2c'u8]),
+    wicPixelFormat80bppCMYKAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x2d'u8]),
+    wicPixelFormat32bpp3ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x2e'u8]),
+    wicPixelFormat40bpp4ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x2f'u8]),
+    wicPixelFormat48bpp5ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x30'u8]),
+    wicPixelFormat56bpp6ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x31'u8]),
+    wicPixelFormat64bpp7ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x32'u8]),
+    wicPixelFormat72bpp8ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x33'u8]),
+    wicPixelFormat64bpp3ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x34'u8]),
+    wicPixelFormat80bpp4ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x35'u8]),
+    wicPixelFormat96bpp5ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x36'u8]),
+    wicPixelFormat112bpp6ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x37'u8]),
+    wicPixelFormat128bpp7ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x38'u8]),
+    wicPixelFormat144bpp8ChannelsAlpha: WinGuid(Data1: 0x6fddc324'u32, Data2: 0x4e03'u16, Data3: 0x4bfe'u16, Data4: [0xb1'u8, 0x85'u8, 0x3d'u8, 0x77'u8, 0x76'u8, 0x8d'u8, 0xc9'u8, 0x39'u8]),
+    wicPixelFormat8bppY: WinGuid(Data1: 0x91b4db54'u32, Data2: 0x2df9'u16, Data3: 0x42f0'u16, Data4: [0xb4'u8, 0x49'u8, 0x29'u8, 0x09'u8, 0xbb'u8, 0x3d'u8, 0xf8'u8, 0x8e'u8]),
+    wicPixelFormat8bppCb: WinGuid(Data1: 0x1339f224'u32, Data2: 0x6bfe'u16, Data3: 0x4c3e'u16, Data4: [0x93'u8, 0x02'u8, 0xe4'u8, 0xf3'u8, 0xa6'u8, 0xd0'u8, 0xca'u8, 0x2a'u8]),
+    wicPixelFormat8bppCr: WinGuid(Data1: 0xb8145053'u32, Data2: 0x2116'u16, Data3: 0x49f0'u16, Data4: [0x88'u8, 0x35'u8, 0xed'u8, 0x84'u8, 0x4b'u8, 0x20'u8, 0x5c'u8, 0x51'u8]),
+    wicPixelFormat16bppCbCr: WinGuid(Data1: 0xff95ba6e'u32, Data2: 0x11e0'u16, Data3: 0x4263'u16, Data4: [0xbb'u8, 0x45'u8, 0x01'u8, 0x72'u8, 0x1f'u8, 0x34'u8, 0x60'u8, 0xa4'u8]),
+    wicPixelFormat16bppYQuantizedDctCoefficients: WinGuid(Data1: 0xa355f433'u32, Data2: 0x48e8'u16, Data3: 0x4a42'u16, Data4: [0x84'u8, 0xd8'u8, 0xe2'u8, 0xaa'u8, 0x26'u8, 0xca'u8, 0x80'u8, 0xa4'u8]),
+    wicPixelFormat16bppCbQuantizedDctCoefficients: WinGuid(Data1: 0xd2c4ff61'u32, Data2: 0x56a5'u16, Data3: 0x49c2'u16, Data4: [0x8b'u8, 0x5c'u8, 0x4c'u8, 0x19'u8, 0x25'u8, 0x96'u8, 0x48'u8, 0x37'u8]),
+    wicPixelFormat16bppCrQuantizedDctCoefficients: WinGuid(Data1: 0x2fe354f0'u32, Data2: 0x1680'u16, Data3: 0x42d8'u16, Data4: [0x92'u8, 0x31'u8, 0xe7'u8, 0x3c'u8, 0x05'u8, 0x65'u8, 0xbf'u8, 0xc1'u8]),
+  ]

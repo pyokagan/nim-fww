@@ -1,0 +1,128 @@
+## D2D1 extension: allows you to use effects in a type-safe manner
+import d2d1, win32guid
+import wic_shared
+
+{.stackTrace:off, boundChecks:off, overflowChecks:off, rangeChecks:off.}
+
+template castRaw(x): ptr UncheckedArray[uint8] =
+  cast[ptr UncheckedArray[uint8]](x)
+
+const
+  CLSID_D2D12DAffineTransform = WinGuid(Data1: 0x6aa97485'u32, Data2: 0x6354'u16, Data3: 0x4cfc'u16, Data4: [0x90'u8, 0x8c'u8, 0xe4'u8, 0xa7'u8, 0x4f'u8, 0x62'u8, 0xc9'u8, 0x6c'u8])
+  CLSID_D2D13DPerspectiveTransform = WinGuid(Data1: 0xc2844d0b'u32, Data2: 0x3d86'u16, Data3: 0x46e7'u16, Data4: [0x85'u8, 0xba'u8, 0x52'u8, 0x6c'u8, 0x92'u8, 0x40'u8, 0xf3'u8, 0xfb'u8])
+  CLSID_D2D13DTransform = WinGuid(Data1: 0xe8467b04'u32, Data2: 0xec61'u16, Data3: 0x4b8a'u16, Data4: [0xb5'u8, 0xde'u8, 0xd4'u8, 0xd7'u8, 0x3d'u8, 0xeb'u8, 0xea'u8, 0x5a'u8])
+  CLSID_D2D1ArithmeticComposite = WinGuid(Data1: 0xfc151437'u32, Data2: 0x049a'u16, Data3: 0x4784'u16, Data4: [0xa2'u8, 0x4a'u8, 0xf1'u8, 0xc4'u8, 0xda'u8, 0xf2'u8, 0x09'u8, 0x87'u8])
+  CLSID_D2D1Atlas = WinGuid(Data1: 0x913e2be4'u32, Data2: 0xfdcf'u16, Data3: 0x4fe2'u16, Data4: [0xa5'u8, 0xf0'u8, 0x24'u8, 0x54'u8, 0xf1'u8, 0x4f'u8, 0xf4'u8, 0x08'u8])
+  CLSID_D2D1BitmapSource = WinGuid(Data1: 0x5fb6c24d'u32, Data2: 0xc6dd'u16, Data3: 0x4231'u16, Data4: [0x94'u8, 0x04'u8, 0x50'u8, 0xf4'u8, 0xd5'u8, 0xc3'u8, 0x25'u8, 0x2d'u8])
+  CLSID_D2D1Blend = WinGuid(Data1: 0x81c5b77b'u32, Data2: 0x13f8'u16, Data3: 0x4cdd'u16, Data4: [0xad'u8, 0x20'u8, 0xc8'u8, 0x90'u8, 0x54'u8, 0x7a'u8, 0xc6'u8, 0x5d'u8])
+  CLSID_D2D1Border = WinGuid(Data1: 0x2a2d49c0'u32, Data2: 0x4acf'u16, Data3: 0x43c7'u16, Data4: [0x8c'u8, 0x6a'u8, 0x7c'u8, 0x4a'u8, 0x27'u8, 0x87'u8, 0x4d'u8, 0x27'u8])
+  CLSID_D2D1Brightness = WinGuid(Data1: 0x8cea8d1e'u32, Data2: 0x77b0'u16, Data3: 0x4986'u16, Data4: [0xb3'u8, 0xb9'u8, 0x2f'u8, 0x0c'u8, 0x0e'u8, 0xae'u8, 0x78'u8, 0x87'u8])
+  CLSID_D2D1ColorManagement = WinGuid(Data1: 0x1a28524c'u32, Data2: 0xfdd6'u16, Data3: 0x4aa4'u16, Data4: [0xae'u8, 0x8f'u8, 0x83'u8, 0x7e'u8, 0xb8'u8, 0x26'u8, 0x7b'u8, 0x37'u8])
+  CLSID_D2D1ColorMatrix = WinGuid(Data1: 0x921f03d6'u32, Data2: 0x641c'u16, Data3: 0x47df'u16, Data4: [0x85'u8, 0x2d'u8, 0xb4'u8, 0xbb'u8, 0x61'u8, 0x53'u8, 0xae'u8, 0x11'u8])
+  CLSID_D2D1Composite = WinGuid(Data1: 0x48fc9f51'u32, Data2: 0xf6ac'u16, Data3: 0x48f1'u16, Data4: [0x8b'u8, 0x58'u8, 0x3b'u8, 0x28'u8, 0xac'u8, 0x46'u8, 0xf7'u8, 0x6d'u8])
+  CLSID_D2D1ConvolveMatrix = WinGuid(Data1: 0x407f8c08'u32, Data2: 0x5533'u16, Data3: 0x4331'u16, Data4: [0xa3'u8, 0x41'u8, 0x23'u8, 0xcc'u8, 0x38'u8, 0x77'u8, 0x84'u8, 0x3e'u8])
+  CLSID_D2D1Crop = WinGuid(Data1: 0xe23f7110'u32, Data2: 0x0e9a'u16, Data3: 0x4324'u16, Data4: [0xaf'u8, 0x47'u8, 0x6a'u8, 0x2c'u8, 0x0c'u8, 0x46'u8, 0xf3'u8, 0x5b'u8])
+  CLSID_D2D1DirectionalBlur = WinGuid(Data1: 0x174319a6'u32, Data2: 0x58e9'u16, Data3: 0x49b2'u16, Data4: [0xbb'u8, 0x63'u8, 0xca'u8, 0xf2'u8, 0xc8'u8, 0x11'u8, 0xa3'u8, 0xdb'u8])
+  CLSID_D2D1DiscreteTransfer = WinGuid(Data1: 0x90866fcd'u32, Data2: 0x488e'u16, Data3: 0x454b'u16, Data4: [0xaf'u8, 0x06'u8, 0xe5'u8, 0x04'u8, 0x1b'u8, 0x66'u8, 0xc3'u8, 0x6c'u8])
+  CLSID_D2D1DisplacementMap = WinGuid(Data1: 0xedc48364'u32, Data2: 0x0417'u16, Data3: 0x4111'u16, Data4: [0x94'u8, 0x50'u8, 0x43'u8, 0x84'u8, 0x5f'u8, 0xa9'u8, 0xf8'u8, 0x90'u8])
+  CLSID_D2D1DistantDiffuse = WinGuid(Data1: 0x3e7efd62'u32, Data2: 0xa32d'u16, Data3: 0x46d4'u16, Data4: [0xa8'u8, 0x3c'u8, 0x52'u8, 0x78'u8, 0x88'u8, 0x9a'u8, 0xc9'u8, 0x54'u8])
+  CLSID_D2D1DistantSpecular = WinGuid(Data1: 0x428c1ee5'u32, Data2: 0x77b8'u16, Data3: 0x4450'u16, Data4: [0x8a'u8, 0xb5'u8, 0x72'u8, 0x21'u8, 0x9c'u8, 0x21'u8, 0xab'u8, 0xda'u8])
+  CLSID_D2D1DpiCompensation = WinGuid(Data1: 0x6c26c5c7'u32, Data2: 0x34e0'u16, Data3: 0x46fc'u16, Data4: [0x9c'u8, 0xfd'u8, 0xe5'u8, 0x82'u8, 0x37'u8, 0x06'u8, 0xe2'u8, 0x28'u8])
+  CLSID_D2D1Flood = WinGuid(Data1: 0x61c23c20'u32, Data2: 0xae69'u16, Data3: 0x4d8e'u16, Data4: [0x94'u8, 0xcf'u8, 0x50'u8, 0x07'u8, 0x8d'u8, 0xf6'u8, 0x38'u8, 0xf2'u8])
+  CLSID_D2D1GammaTransfer = WinGuid(Data1: 0x409444c4'u32, Data2: 0xc419'u16, Data3: 0x41a0'u16, Data4: [0xb0'u8, 0xc1'u8, 0x8c'u8, 0xd0'u8, 0xc0'u8, 0xa1'u8, 0x8e'u8, 0x42'u8])
+  CLSID_D2D1GaussianBlur = WinGuid(Data1: 0x1feb6d69'u32, Data2: 0x2fe6'u16, Data3: 0x4ac9'u16, Data4: [0x8c'u8, 0x58'u8, 0x1d'u8, 0x7f'u8, 0x93'u8, 0xe7'u8, 0xa6'u8, 0xa5'u8])
+  CLSID_D2D1Scale = WinGuid(Data1: 0x9daf9369'u32, Data2: 0x3846'u16, Data3: 0x4d0e'u16, Data4: [0xa4'u8, 0x4e'u8, 0x0c'u8, 0x60'u8, 0x79'u8, 0x34'u8, 0xa5'u8, 0xd7'u8])
+  CLSID_D2D1Histogram = WinGuid(Data1: 0x881db7d0'u32, Data2: 0xf7ee'u16, Data3: 0x4d4d'u16, Data4: [0xa6'u8, 0xd2'u8, 0x46'u8, 0x97'u8, 0xac'u8, 0xc6'u8, 0x6e'u8, 0xe8'u8])
+  CLSID_D2D1HueRotation = WinGuid(Data1: 0x0f4458ec'u32, Data2: 0x4b32'u16, Data3: 0x491b'u16, Data4: [0x9e'u8, 0x85'u8, 0xbd'u8, 0x73'u8, 0xf4'u8, 0x4d'u8, 0x3e'u8, 0xb6'u8])
+  CLSID_D2D1LinearTransfer = WinGuid(Data1: 0xad47c8fd'u32, Data2: 0x63ef'u16, Data3: 0x4acc'u16, Data4: [0x9b'u8, 0x51'u8, 0x67'u8, 0x97'u8, 0x9c'u8, 0x03'u8, 0x6c'u8, 0x06'u8])
+  CLSID_D2D1LuminanceToAlpha = WinGuid(Data1: 0x41251ab7'u32, Data2: 0x0beb'u16, Data3: 0x46f8'u16, Data4: [0x9d'u8, 0xa7'u8, 0x59'u8, 0xe9'u8, 0x3f'u8, 0xcc'u8, 0xe5'u8, 0xde'u8])
+  CLSID_D2D1Morphology = WinGuid(Data1: 0xeae6c40d'u32, Data2: 0x626a'u16, Data3: 0x4c2d'u16, Data4: [0xbf'u8, 0xcb'u8, 0x39'u8, 0x10'u8, 0x01'u8, 0xab'u8, 0xe2'u8, 0x02'u8])
+  CLSID_D2D1OpacityMetadata = WinGuid(Data1: 0x6c53006a'u32, Data2: 0x4450'u16, Data3: 0x4199'u16, Data4: [0xaa'u8, 0x5b'u8, 0xad'u8, 0x16'u8, 0x56'u8, 0xfe'u8, 0xce'u8, 0x5e'u8])
+  CLSID_D2D1PointDiffuse = WinGuid(Data1: 0xb9e303c3'u32, Data2: 0xc08c'u16, Data3: 0x4f91'u16, Data4: [0x8b'u8, 0x7b'u8, 0x38'u8, 0x65'u8, 0x6b'u8, 0xc4'u8, 0x8c'u8, 0x20'u8])
+  CLSID_D2D1PointSpecular = WinGuid(Data1: 0x09c3ca26'u32, Data2: 0x3ae2'u16, Data3: 0x4f09'u16, Data4: [0x9e'u8, 0xbc'u8, 0xed'u8, 0x38'u8, 0x65'u8, 0xd5'u8, 0x3f'u8, 0x22'u8])
+  CLSID_D2D1Premultiply = WinGuid(Data1: 0x06eab419'u32, Data2: 0xdeed'u16, Data3: 0x4018'u16, Data4: [0x80'u8, 0xd2'u8, 0x3e'u8, 0x1d'u8, 0x47'u8, 0x1a'u8, 0xde'u8, 0xb2'u8])
+  CLSID_D2D1Saturation = WinGuid(Data1: 0x5cb2d9cf'u32, Data2: 0x327d'u16, Data3: 0x459f'u16, Data4: [0xa0'u8, 0xce'u8, 0x40'u8, 0xc0'u8, 0xb2'u8, 0x08'u8, 0x6b'u8, 0xf7'u8])
+  CLSID_D2D1Shadow = WinGuid(Data1: 0xc67ea361'u32, Data2: 0x1863'u16, Data3: 0x4e69'u16, Data4: [0x89'u8, 0xdb'u8, 0x69'u8, 0x5d'u8, 0x3e'u8, 0x9a'u8, 0x5b'u8, 0x6b'u8])
+  CLSID_D2D1SpotDiffuse = WinGuid(Data1: 0x818a1105'u32, Data2: 0x7932'u16, Data3: 0x44f4'u16, Data4: [0xaa'u8, 0x86'u8, 0x08'u8, 0xae'u8, 0x7b'u8, 0x2f'u8, 0x2c'u8, 0x93'u8])
+  CLSID_D2D1SpotSpecular = WinGuid(Data1: 0xedae421e'u32, Data2: 0x7654'u16, Data3: 0x4a37'u16, Data4: [0x9d'u8, 0xb8'u8, 0x71'u8, 0xac'u8, 0xc1'u8, 0xbe'u8, 0xb3'u8, 0xc1'u8])
+  CLSID_D2D1TableTransfer = WinGuid(Data1: 0x5bf818c3'u32, Data2: 0x5e43'u16, Data3: 0x48cb'u16, Data4: [0xb6'u8, 0x31'u8, 0x86'u8, 0x83'u8, 0x96'u8, 0xd6'u8, 0xa1'u8, 0xd4'u8])
+  CLSID_D2D1Tile = WinGuid(Data1: 0xb0784138'u32, Data2: 0x3b76'u16, Data3: 0x4bc5'u16, Data4: [0xb1'u8, 0x3b'u8, 0x0f'u8, 0xa2'u8, 0xad'u8, 0x02'u8, 0x65'u8, 0x9f'u8])
+  CLSID_D2D1Turbulence = WinGuid(Data1: 0xcf2bb6ae'u32, Data2: 0x889a'u16, Data3: 0x4ad7'u16, Data4: [0xba'u8, 0x29'u8, 0xa2'u8, 0xfd'u8, 0x73'u8, 0x2c'u8, 0x9f'u8, 0xc9'u8])
+  CLSID_D2D1UnPremultiply = WinGuid(Data1: 0xfb9ac489'u32, Data2: 0xad8d'u16, Data3: 0x41ed'u16, Data4: [0x99'u8, 0x99'u8, 0xbb'u8, 0x63'u8, 0x47'u8, 0xd1'u8, 0x10'u8, 0xf7'u8])
+  CLSID_D2D1YCbCr = WinGuid(Data1: 0x99503cc1'u32, Data2: 0x66c7'u16, Data3: 0x45c9'u16, Data4: [0xa8'u8, 0x75'u8, 0x8a'u8, 0xd8'u8, 0xa7'u8, 0x91'u8, 0x44'u8, 0x01'u8])
+  CLSID_D2D1Contrast = WinGuid(Data1: 0xb648a78a'u32, Data2: 0x0ed5'u16, Data3: 0x4f80'u16, Data4: [0xa9'u8, 0x4a'u8, 0x8e'u8, 0x82'u8, 0x5a'u8, 0xca'u8, 0x6b'u8, 0x77'u8])
+  CLSID_D2D1RgbToHue = WinGuid(Data1: 0x23f3e5ec'u32, Data2: 0x91e8'u16, Data3: 0x4d3d'u16, Data4: [0xad'u8, 0x0a'u8, 0xaf'u8, 0xad'u8, 0xc1'u8, 0x00'u8, 0x4a'u8, 0xa1'u8])
+  CLSID_D2D1HueToRgb = WinGuid(Data1: 0x7b78a6bd'u32, Data2: 0x0141'u16, Data3: 0x4def'u16, Data4: [0x8a'u8, 0x52'u8, 0x63'u8, 0x56'u8, 0xee'u8, 0x0c'u8, 0xbd'u8, 0xd5'u8])
+  CLSID_D2D1ChromaKey = WinGuid(Data1: 0x74c01f5b'u32, Data2: 0x2a0d'u16, Data3: 0x408c'u16, Data4: [0x88'u8, 0xe2'u8, 0xc7'u8, 0xa3'u8, 0xc7'u8, 0x19'u8, 0x77'u8, 0x42'u8])
+  CLSID_D2D1Emboss = WinGuid(Data1: 0xb1c5eb2b'u32, Data2: 0x0348'u16, Data3: 0x43f0'u16, Data4: [0x81'u8, 0x07'u8, 0x49'u8, 0x57'u8, 0xca'u8, 0xcb'u8, 0xa2'u8, 0xae'u8])
+  CLSID_D2D1Exposure = WinGuid(Data1: 0xb56c8cfa'u32, Data2: 0xf634'u16, Data3: 0x41ee'u16, Data4: [0xbe'u8, 0xe0'u8, 0xff'u8, 0xa6'u8, 0x17'u8, 0x10'u8, 0x60'u8, 0x04'u8])
+  CLSID_D2D1Grayscale = WinGuid(Data1: 0x36dde0eb'u32, Data2: 0x3725'u16, Data3: 0x42e0'u16, Data4: [0x83'u8, 0x6d'u8, 0x52'u8, 0xfb'u8, 0x20'u8, 0xae'u8, 0xe6'u8, 0x44'u8])
+  CLSID_D2D1Invert = WinGuid(Data1: 0xe0c3784d'u32, Data2: 0xcb39'u16, Data3: 0x4e84'u16, Data4: [0xb6'u8, 0xfd'u8, 0x6b'u8, 0x72'u8, 0xf0'u8, 0x81'u8, 0x02'u8, 0x63'u8])
+  CLSID_D2D1Posterize = WinGuid(Data1: 0x2188945e'u32, Data2: 0x33a3'u16, Data3: 0x4366'u16, Data4: [0xb7'u8, 0xbc'u8, 0x08'u8, 0x6b'u8, 0xd0'u8, 0x2d'u8, 0x08'u8, 0x84'u8])
+  CLSID_D2D1Sepia = WinGuid(Data1: 0x3a1af410'u32, Data2: 0x5f1d'u16, Data3: 0x4dbe'u16, Data4: [0x84'u8, 0xdf'u8, 0x91'u8, 0x5d'u8, 0xa7'u8, 0x9b'u8, 0x71'u8, 0x53'u8])
+  CLSID_D2D1Sharpen = WinGuid(Data1: 0xc9b887cb'u32, Data2: 0xc5ff'u16, Data3: 0x4dc5'u16, Data4: [0x97'u8, 0x79'u8, 0x27'u8, 0x3d'u8, 0xcf'u8, 0x41'u8, 0x7c'u8, 0x7d'u8])
+  CLSID_D2D1Straighten = WinGuid(Data1: 0x4da47b12'u32, Data2: 0x79a3'u16, Data3: 0x4fb0'u16, Data4: [0x82'u8, 0x37'u8, 0xbb'u8, 0xc3'u8, 0xb2'u8, 0xa4'u8, 0xde'u8, 0x08'u8])
+  CLSID_D2D1TemperatureTint = WinGuid(Data1: 0x89176087'u32, Data2: 0x8af9'u16, Data3: 0x4a08'u16, Data4: [0xae'u8, 0xb1'u8, 0x89'u8, 0x5f'u8, 0x38'u8, 0xdb'u8, 0x17'u8, 0x66'u8])
+  CLSID_D2D1Vignette = WinGuid(Data1: 0xc00c40be'u32, Data2: 0x5e67'u16, Data3: 0x4ca3'u16, Data4: [0x95'u8, 0xb4'u8, 0xf4'u8, 0xb0'u8, 0x2c'u8, 0x11'u8, 0x51'u8, 0x35'u8])
+  CLSID_D2D1EdgeDetection = WinGuid(Data1: 0xeff583ca'u32, Data2: 0xcb07'u16, Data3: 0x4aa9'u16, Data4: [0xac'u8, 0x5d'u8, 0x2c'u8, 0xc4'u8, 0x4c'u8, 0x76'u8, 0x46'u8, 0x0f'u8])
+  CLSID_D2D1HighlightsShadows = WinGuid(Data1: 0xcadc8384'u32, Data2: 0x323f'u16, Data3: 0x4c7e'u16, Data4: [0xa3'u8, 0x61'u8, 0x2e'u8, 0x2b'u8, 0x24'u8, 0xdf'u8, 0x6e'u8, 0xe4'u8])
+  CLSID_D2D1LookupTable3D = WinGuid(Data1: 0x349e0eda'u32, Data2: 0x0088'u16, Data3: 0x4a79'u16, Data4: [0x9c'u8, 0xa3'u8, 0xc7'u8, 0xe3'u8, 0x00'u8, 0x20'u8, 0x20'u8, 0x20'u8])
+  CLSID_D2D1Opacity = WinGuid(Data1: 0x811d79a4'u32, Data2: 0xde28'u16, Data3: 0x4454'u16, Data4: [0x80'u8, 0x94'u8, 0xc6'u8, 0x46'u8, 0x85'u8, 0xf8'u8, 0xbd'u8, 0x4c'u8])
+  CLSID_D2D1AlphaMask = WinGuid(Data1: 0xc80ecff0'u32, Data2: 0x3fd5'u16, Data3: 0x4f05'u16, Data4: [0x83'u8, 0x28'u8, 0xc5'u8, 0xd1'u8, 0x72'u8, 0x4b'u8, 0x4f'u8, 0x0a'u8])
+  CLSID_D2D1CrossFade = WinGuid(Data1: 0x12f575e8'u32, Data2: 0x4db1'u16, Data3: 0x485f'u16, Data4: [0x9a'u8, 0x84'u8, 0x03'u8, 0xa0'u8, 0x7d'u8, 0xd3'u8, 0x82'u8, 0x9f'u8])
+  CLSID_D2D1Tint = WinGuid(Data1: 0x36312b17'u32, Data2: 0xf7dd'u16, Data3: 0x4014'u16, Data4: [0x91'u8, 0x5d'u8, 0xff'u8, 0xca'u8, 0x76'u8, 0x8c'u8, 0xf2'u8, 0x11'u8])
+  CLSID_D2D1WhiteLevelAdjustment = WinGuid(Data1: 0x44a1cadb'u32, Data2: 0x6cdd'u16, Data3: 0x4818'u16, Data4: [0x8f'u8, 0xf4'u8, 0x26'u8, 0xc1'u8, 0xcf'u8, 0xe9'u8, 0x5b'u8, 0xdb'u8])
+  CLSID_D2D1HdrToneMap = WinGuid(Data1: 0x7b0b748d'u32, Data2: 0x4610'u16, Data3: 0x4486'u16, Data4: [0xa9'u8, 0x0c'u8, 0x99'u8, 0x9d'u8, 0x9a'u8, 0x2e'u8, 0x2b'u8, 0x11'u8])
+
+type
+  ID2d1BitmapSourceEffect* = object of ID2d1Effect
+    ## d2d1 extension
+    discard
+
+proc createBitmapSourceEffect*(self: ptr ID2d1DeviceContext; effect: var ptr ID2d1BitmapSourceEffect): WinResult {.inline, raises: [].} =
+  var p = (ptr ID2d1Effect)(nil)
+  result = createEffect(self, CLSID_D2D1BitmapSource, p)
+  if result.succeeded:
+    effect = cast[ptr ID2d1BitmapSourceEffect](p)
+
+proc setWicBitmapSource*(self: ptr ID2d1BitmapSourceEffect; source: ptr IWicBitmapSource): WinResult {.inline, raises: [].} =
+  var source = source
+  result = self.setValue(0, d2d1PropertyTypeIUnknown, castRaw source.addr, sizeof(source).uint32)
+
+proc setScale*(self: ptr ID2d1BitmapSourceEffect; scale: D2d1Vec2f): WinResult {.inline, raises: [].} =
+  var tmp {.noinit.}: array[2, float32]
+  tmp[0] = scale.x
+  tmp[1] = scale.y
+  result = self.setValue(1, d2d1PropertyTypeVector2, castRaw tmp.addr, sizeof(tmp).uint32)
+
+proc setInterpolationMode*(self: ptr ID2d1BitmapSourceEffect; mode: D2d1BitmapSourceInterpolationMode): WinResult {.inline, raises: [].} =
+  var mode = ord(mode).uint32
+  result = self.setValue(2, d2d1PropertyTypeEnum, castRaw mode.addr, sizeof(mode).uint32)
+
+proc setEnableDpiCorrection*(self: ptr ID2d1BitmapSourceEffect; enable: bool): WinResult {.inline, raises: [].} =
+  var value = enable.uint32
+  result = self.setValue(3, d2d1PropertyTypeBool, castRaw value.addr, sizeof(value).uint32)
+
+type
+  ID2d12dAffineTransformEffect* = object of ID2d1Effect
+    discard
+
+proc create2dAffineTransformEffect*(self: ptr ID2d1DeviceContext; effect: var ptr ID2d12dAffineTransformEffect): WinResult {.inline, raises: [].} =
+  var p = (ptr ID2d1Effect)(nil)
+  result = createEffect(self, CLSID_D2D12DAffineTransform, p)
+  if result.succeeded:
+    effect = cast[ptr ID2d12dAffineTransformEffect](p)
+
+proc setInterpolationMode*(self: ptr ID2d12dAffineTransformEffect; value: D2d12dAffineTransformInterpolationMode): WinResult {.inline, raises: [].} =
+  var tmp = value.uint32
+  result = self.setValue(0, d2d1PropertyTypeEnum, castRaw tmp.addr, sizeof(tmp).uint32)
+
+proc setTransform*(self: ptr ID2d12dAffineTransformEffect; value: D2d1Affine2f): WinResult {.inline, raises: [].} =
+  var vals {.noinit.}: array[6, float32]
+  vals[0] = value.m.m11
+  vals[1] = value.m.m12
+  vals[2] = value.m.m21
+  vals[3] = value.m.m22
+  vals[4] = value.t.x
+  vals[5] = value.t.y
+  result = self.setValue(2, d2d1PropertyTypeMatrix3x2, castRaw vals.addr, sizeof(vals).uint32)
